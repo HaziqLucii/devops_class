@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'home',
     'waktusolat',
     'poi',
+    'searchpoi',
 ]
 
 MIDDLEWARE = [

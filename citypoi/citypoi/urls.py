@@ -7,4 +7,5 @@ urlpatterns = [
     path('', include('home.urls')),
     path('map/', include('waktusolat.urls')),
     path('poi/', include('poi.urls')),
+    path('search-poi/', include('searchpoi.urls')),
 ]

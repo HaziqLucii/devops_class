@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>POI Search</h1>
+
+<!-- Dropdown for layers -->
+<div class="form-group">
+    <label for="layers-dropdown">Select a Layer:</label>
+    <select id="layers-dropdown" class="form-control">
+        <option value="">-- Select a Layer --</option>
+    </select>
+</div>
+
+<!-- Search bar -->
+<div id="search-container" class="form-group" style="display: none;">
+    <label for="search-input">Search:</label>
+    <input type="text" id="search-input" class="form-control" placeholder="Search properties...">
+    <button id="search-button" class="btn btn-primary">Search</button>
+</div>
+
+<div id="map"></div>
+
+<script type="text/javascript">
+    var map;
+    var markersLayer;
+
+    $(document).ready(function() {
+        // Initialize map
+        map = L.map('map').setView([3.9920, 109.1765], 6.2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Initialize markers layer group
+        markersLayer = L.layerGroup().addTo(map);
+
+        var apiUrl = 'https://mymaps.mygeoportal.gov.my/api/datasets/';
+        
+        // Fetch layers from API and populate the dropdown
+        $.ajax({
+            url: apiUrl,
+            headers: {
+                // "Authorization": "Bearer Xu7hzRbv89oSyKylsa9fuN0i0XNvLR"
+            },
+        }).done(function(response) {
+            var layers = response.objects;
+            var layersDropdown = document.getElementById('layers-dropdown');
+            
+            layers.forEach(function(layer) {
+                // Create an option for each layer
+                var option = document.createElement('option');
+                option.value = layer.alternate;
+                option.textContent = layer.title.replace(/_./g, match => ' ' + match.charAt(1).toUpperCase());
+                
+                // Append the option to the dropdown
+                layersDropdown.appendChild(option);
+            });
+        });
+
+        // Event listener for dropdown change
+        $('#layers-dropdown').on('change', function() {
+            var layerValue = $(this).val();
+            var searchContainer = $('#search-container');
+
+            if (layerValue) {
+                searchContainer.show();
+            } else {
+                searchContainer.hide();
+            }
+        });
+
+        // Event listener for search button
+        $('#search-button').on('click', function() {
+            var searchText = $('#search-input').val().trim();
+            var layerValue = $('#layers-dropdown').val();
+            var owsUrl = 'https://mymaps.mygeoportal.gov.my/geoserver/wfs';
+
+            if (layerValue && searchText) {
+                // Fetch data with CQL filter and add markers to the map
+                fetchWFSLayerData(layerValue, owsUrl, searchText);
+            }
+        });
+
+        // proj4.defs("EPSG:3375","+proj=omerc +no_uoff +lat_0=4 +lonc=102.25 +alpha=323.025796466667 +gamma=323.130102361111 +k=0.99984 +x_0=804671 +y_0=0 +ellps=GRS80 +units=m +no_defs +type=crs");
+    });
+
+    // Function to fetch WFS layer data from GeoServer with CQL Filter
+    async function fetchWFSLayerData(layerName, owsUrl, searchText) {
+        // Build the CQL filter
+        // var cqlFilter = `name LIKE '%${searchText}%'`;
+        var wfsUrl = `${owsUrl}?service=WFS&version=1.0.0&request=GetFeature&typeName=${layerName}&maxFeatures=50&outputFormat=application/json&CQL_FILTER=${encodeURIComponent(searchText)}`;
+
+        try {
+            var data = await fetch(wfsUrl);
+            var response = await data.json();
+
+            // Clear existing markers
+            markersLayer.clearLayers();
+
+            // Extract and log the properties of each feature
+            var features = response.features;
+            var bounds = L.latLngBounds(); // Create a LatLngBounds object to fit all markers
+
+            features.forEach(function(feature) {
+                var coordinates = feature.geometry.coordinates;
+                var properties = feature.properties;
+                
+                // Create a marker for each feature
+                var marker = L.marker([coordinates[1], coordinates[0]])
+                    .bindPopup(`<b>${properties.name}</b><br>${properties.fclass}`)
+                    .addTo(markersLayer);
+
+                // Extend the bounds to include this marker
+                bounds.extend(marker.getLatLng());
+            });
+
+            // Fit the map view to the bounds of all markers
+            if (features.length > 0) {
+                map.fitBounds(bounds);
+            }
+
+            return response;
+        } catch (error) {
+            console.error('There was an issue with the fetch operation:', error);
+        }
+    }
+</script>
+{% endblock %}
