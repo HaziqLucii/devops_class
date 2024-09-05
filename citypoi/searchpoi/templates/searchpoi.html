@@ -1,128 +1,182 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 
 {% block content %}
 <h1>POI Search</h1>
 
-<!-- Dropdown for layers -->
+<!-- Error alert -->
+<div id="error-alert" class="alert alert-danger" role="alert" style="display: none;">
+</div>
+
+<!-- Choosing Layers -->
 <div class="form-group">
     <label for="layers-dropdown">Select a Layer:</label>
     <select id="layers-dropdown" class="form-control">
         <option value="">-- Select a Layer --</option>
+        {% for layer in layers %}
+            <option value="{{ layer.alternate }}">{{ layer.title|replace_underscore }}</option>
+        {% endfor %}
     </select>
 </div>
 
-<!-- Search bar -->
-<div id="search-container" class="form-group" style="display: none;">
-    <label for="search-input">Search:</label>
-    <input type="text" id="search-input" class="form-control" placeholder="Search properties...">
-    <button id="search-button" class="btn btn-primary">Search</button>
+<!-- Filtering -->
+<div id="search" style="display:none;">
+    <div class="form-group">
+        <label for="properties-dropdown">Select a Property Key:</label>
+        <select id="properties-dropdown" class="form-control">
+            <option value="">-- Select a Property Key --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="search-input">Search:</label>
+        <input type="text" id="search-input" class="form-control" placeholder="Search properties...">
+        <button id="search-button" class="btn btn-primary" style="margin-top: 10px">Search</button>
+    </div>
 </div>
 
 <div id="map"></div>
+
+<!-- Properties Table (after clicking the marker) -->
+<div id="properties-table-container" style="display: none; margin-top: 20px;">
+    <h3>Feature Properties</h3>
+    <table id="properties-table" class="prayer-times-table">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
 
 <script type="text/javascript">
     var map;
     var markersLayer;
 
-    $(document).ready(function() {
-        // Initialize map
-        map = L.map('map').setView([3.9920, 109.1765], 6.2);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
+    // Initialize map
+    map = L.map('map').setView([3.9920, 109.1765], 6.2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+    markersLayer = L.layerGroup().addTo(map);
 
-        // Initialize markers layer group
-        markersLayer = L.layerGroup().addTo(map);
+    // Toggle search input and property key dropdown visibility
+    function toggleSearchUI(layerSelected) {
+        if (layerSelected) {
+            $('#search').show();
+        } else {
+            $('#search').hide();
+        }
+    }
 
-        var apiUrl = 'https://mymaps.mygeoportal.gov.my/api/datasets/';
-        
-        // Fetch layers from API and populate the dropdown
-        $.ajax({
-            url: apiUrl,
-            headers: {
-                // "Authorization": "Bearer Xu7hzRbv89oSyKylsa9fuN0i0XNvLR"
-            },
-        }).done(function(response) {
-            var layers = response.objects;
-            var layersDropdown = document.getElementById('layers-dropdown');
-            
-            layers.forEach(function(layer) {
-                // Create an option for each layer
-                var option = document.createElement('option');
-                option.value = layer.alternate;
-                option.textContent = layer.title.replace(/_./g, match => ' ' + match.charAt(1).toUpperCase());
-                
-                // Append the option to the dropdown
-                layersDropdown.appendChild(option);
-            });
-        });
+    // Layer dropdown change event
+    $('#layers-dropdown').on('change', function() {
+        var layerValue = $(this).val();
+        toggleSearchUI(layerValue);
 
-        // Event listener for dropdown change
-        $('#layers-dropdown').on('change', function() {
-            var layerValue = $(this).val();
-            var searchContainer = $('#search-container');
-
-            if (layerValue) {
-                searchContainer.show();
-            } else {
-                searchContainer.hide();
-            }
-        });
-
-        // Event listener for search button
-        $('#search-button').on('click', function() {
-            var searchText = $('#search-input').val().trim();
-            var layerValue = $('#layers-dropdown').val();
-            var owsUrl = 'https://mymaps.mygeoportal.gov.my/geoserver/wfs';
-
-            if (layerValue && searchText) {
-                // Fetch data with CQL filter and add markers to the map
-                fetchWFSLayerData(layerValue, owsUrl, searchText);
-            }
-        });
-
-        // proj4.defs("EPSG:3375","+proj=omerc +no_uoff +lat_0=4 +lonc=102.25 +alpha=323.025796466667 +gamma=323.130102361111 +k=0.99984 +x_0=804671 +y_0=0 +ellps=GRS80 +units=m +no_defs +type=crs");
+        if (layerValue) {
+            fetchPropertyKeys(layerValue);
+        }
     });
 
-    // Function to fetch WFS layer data from GeoServer with CQL Filter
-    async function fetchWFSLayerData(layerName, owsUrl, searchText) {
-        // Build the CQL filter
-        // var cqlFilter = `name LIKE '%${searchText}%'`;
-        var wfsUrl = `${owsUrl}?service=WFS&version=1.0.0&request=GetFeature&typeName=${layerName}&maxFeatures=50&outputFormat=application/json&CQL_FILTER=${encodeURIComponent(searchText)}`;
+    // Search button click event
+    $('#search-button').on('click', function() {
+        var searchText = $('#search-input').val().trim();
+        var layerValue = $('#layers-dropdown').val();
+        var propertyKey = $('#properties-dropdown').val();
 
-        try {
-            var data = await fetch(wfsUrl);
-            var response = await data.json();
-
-            // Clear existing markers
-            markersLayer.clearLayers();
-
-            // Extract and log the properties of each feature
-            var features = response.features;
-            var bounds = L.latLngBounds(); // Create a LatLngBounds object to fit all markers
-
-            features.forEach(function(feature) {
-                var coordinates = feature.geometry.coordinates;
-                var properties = feature.properties;
-                
-                // Create a marker for each feature
-                var marker = L.marker([coordinates[1], coordinates[0]])
-                    .bindPopup(`<b>${properties.name}</b><br>${properties.fclass}`)
-                    .addTo(markersLayer);
-
-                // Extend the bounds to include this marker
-                bounds.extend(marker.getLatLng());
-            });
-
-            // Fit the map view to the bounds of all markers
-            if (features.length > 0) {
-                map.fitBounds(bounds);
-            }
-
-            return response;
-        } catch (error) {
-            console.error('There was an issue with the fetch operation:', error);
+        if (layerValue && searchText && propertyKey) {
+            var cqlFilter = `${propertyKey} LIKE '%${searchText}%'`;
+            fetchWFSData(layerValue, cqlFilter);
         }
+    });
+
+    // Fetch property keys for the selected layer
+    function fetchPropertyKeys(layerName) {
+        var owsUrl = 'https://mymaps.mygeoportal.gov.my/geoserver/wfs';
+        var wfsUrl = `${owsUrl}?service=WFS&version=1.0.0&request=GetFeature&typeName=${layerName}&maxFeatures=1&outputFormat=application/json`;
+
+        fetch(wfsUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.features.length > 0) {
+                    var properties = data.features[0].properties;
+                    populatePropertyDropdown(properties);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching property keys:', error);
+            });
+    }
+
+    // Populate the property key dropdown
+    function populatePropertyDropdown(properties) {
+        var dropdown = $('#properties-dropdown');
+        dropdown.empty();
+        Object.keys(properties).forEach(function(key) {
+            dropdown.append(`<option value="${key}">${key}</option>`);
+        });
+    }
+
+    // Fetch WFS data and display markers on the map
+    function fetchWFSData(layerName, cqlFilter) {
+        var owsUrl = 'https://mymaps.mygeoportal.gov.my/geoserver/wfs';
+        var wfsUrl = `${owsUrl}?service=WFS&version=1.0.0&request=GetFeature&typeName=${layerName}&maxFeatures=50&outputFormat=application/json&CQL_FILTER=${encodeURIComponent(cqlFilter)}`;
+
+        fetch(wfsUrl)
+            .then(response => response.json())
+            .then(data => {
+                markersLayer.clearLayers();
+
+                if (data.features.length === 0) {
+                    showError('No data found for the search query.');
+                    return;
+                }
+
+                var bounds = L.latLngBounds();
+                data.features.forEach(function(feature) {
+                    var coords = feature.geometry.coordinates;
+                    var properties = feature.properties;
+
+                    var marker = L.marker([coords[1], coords[0]])
+                        .on('click', function() {
+                            showPropertiesInTable(properties);
+                        })
+                        .addTo(markersLayer);
+
+                    bounds.extend(marker.getLatLng());
+                });
+
+                if (data.features.length > 0) {
+                    map.fitBounds(bounds);
+                    hideError();
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching WFS data:', error);
+                showError('The data was not found.');
+            });
+    }
+
+    // Show properties in a table
+    function showPropertiesInTable(properties) {
+        var tableBody = $('#table-body');
+        tableBody.empty();
+        Object.keys(properties).forEach(function(key) {
+            var row = `<tr><td>${key}</td><td>${properties[key] !== null ? properties[key] : 'N/A'}</td></tr>`;
+            tableBody.append(row);
+        });
+
+        $('#properties-table-container').show();
+    }
+
+    // Show error alert
+    function showError(message) {
+        $('#error-alert').text(message).show();
+    }
+
+    // Hide error alert
+    function hideError() {
+        $('#error-alert').hide();
     }
 </script>
 {% endblock %}

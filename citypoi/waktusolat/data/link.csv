@@ -1,0 +1,119 @@
+id,link,kod_kawasan,nama_kawasan,negeri
+"1","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=JHR01","JHR01","Pulau Aur dan Pulau Pemanggil 
+","JOHOR"
+"2","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=JHR02","JHR02","Johor Bahru, Kota Tinggi, Mersing, Kulai
+","JOHOR"
+"3","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=JHR03","JHR03","Kluang, Pontian
+","JOHOR"
+"4","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=JHR04","JHR04","Batu Pahat, Muar, Segamat, Gemas Johor, Tangkak
+","JOHOR"
+"5","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH01","KDH01","Kota Setar, Kubang Pasu, Pokok Sena (Daerah Kecil)
+","KEDAH"
+"6","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH02","KDH02","Kuala Muda, Yan, Pendang
+","KEDAH"
+"7","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH03","KDH03","Padang Terap, Sik
+","KEDAH"
+"8","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH04","KDH04","Baling
+","KEDAH"
+"9","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH05","KDH05","Bandar Baharu, Kulim
+","KEDAH"
+"10","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH06","KDH06","Langkawi
+","KEDAH"
+"11","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KDH07","KDH07","Puncak Gunung Jerai
+","KEDAH"
+"12","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KTN01","KTN01","Bachok, Kota Bharu, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai, Mukim Chiku
+","KELANTAN"
+"13","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=KTN02","KTN02","Gua Musang (Daerah Galas Dan Bertam), Jeli, Jajahan Kecil Lojing
+","KELANTAN"
+"14","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=MLK01","MLK01","SELURUH NEGERI MELAKA
+","MELAKA"
+"15","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=NGS01","NGS01","Tampin, Jempol
+","NEGERI SEMBILAN"
+"16","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=NGS02","NGS02","Jelebu, Kuala Pilah, Rembau
+","NEGERI SEMBILAN"
+"17","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=NGS03","NGS03","Port Dickson, Seremban
+","NEGERI SEMBILAN"
+"18","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG01","PHG01","Pulau Tioman
+","PAHANG"
+"19","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG02","PHG02","Kuantan, Pekan, Rompin, Muadzam Shah
+","PAHANG"
+"20","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG03","PHG03","Jerantut, Temerloh, Maran, Bera, Chenor, Jengka
+","PAHANG"
+"21","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG04","PHG04","Bentong, Lipis, Raub
+","PAHANG"
+"22","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG05","PHG05","Genting Sempah, Janda Baik, Bukit Tinggi
+","PAHANG"
+"23","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PHG06","PHG06","Cameron Highlands, Genting Higlands, Bukit Fraser
+","PAHANG"
+"24","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PLS01","PLS01","Kangar, Padang Besar, Arau
+","PERLIS"
+"25","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PNG01","PNG01","Seluruh Negeri Pulau Pinang
+","PULAU PINANG"
+"26","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK01","PRK01","Tapah, Slim River, Tanjung Malim
+","PERAK"
+"27","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK02","PRK02","Kuala Kangsar, Sg. Siput , Ipoh, Batu Gajah, Kampar
+","PERAK"
+"28","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK03","PRK03","Lenggong, Pengkalan Hulu, Grik
+","PERAK"
+"29","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK04","PRK04","Temengor, Belum
+","PERAK"
+"30","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK05","PRK05","Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor
+","PERAK"
+"31","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK06","PRK06","Selama, Taiping, Bagan Serai, Parit Buntar
+","PERAK"
+"32","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=PRK07","PRK07","Bukit Larut
+","PERAK"
+"33","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH01","SBH01","Bahagian Sandakan (Timur), Bukit Garam, Semawang, Temanggong, Tambisan, Bandar Sandakan, Sukau
+","SABAH"
+"34","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH02","SBH02","Beluran, Telupid, Pinangah, Terusan, Kuamut, Bahagian Sandakan (Barat)
+","SABAH"
+"35","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH03","SBH03","Lahad Datu, Silabukan, Kunak, Sahabat, Semporna, Tungku, Bahagian Tawau  (Timur)
+","SABAH"
+"36","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH04","SBH04","Bandar Tawau, Balong, Merotai, Kalabakan, Bahagian Tawau (Barat)
+","SABAH"
+"37","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH05","SBH05","Kudat, Kota Marudu, Pitas, Pulau Banggi, Bahagian Kudat
+","SABAH"
+"38","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH06","SBH06","Gunung Kinabalu
+","SABAH"
+"39","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH07","SBH07","Kota Kinabalu, Ranau, Kota Belud, Tuaran, Penampang, Papar, Putatan, Bahagian Pantai Barat
+","SABAH"
+"40","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH08","SBH08","Pensiangan, Keningau, Tambunan, Nabawan, Bahagian Pendalaman (Atas)
+","SABAH"
+"41","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SBH09","SBH09","Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pasia, Membakut, Weston, Bahagian Pendalaman (Bawah)
+","SABAH"
+"42","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SGR01","SGR01","Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, S.Alam
+","SELANGOR"
+"43","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SGR02","SGR02","Kuala Selangor, Sabak Bernam
+","SELANGOR"
+"44","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SGR03","SGR03","Klang, Kuala Langat
+","SELANGOR"
+"45","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK01","SWK01","Limbang, Lawas, Sundar, Trusan
+","SARAWAK"
+"46","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK02","SWK02","Miri, Niah, Bekenu, Sibuti, Marudi
+","SARAWAK"
+"47","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK03","SWK03","Pandan, Belaga, Suai, Tatau, Sebauh, Bintulu
+","SARAWAK"
+"48","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK04","SWK04","Sibu, Mukah, Dalat, Song, Igan, Oya, Balingian, Kanowit, Kapit
+","SARAWAK"
+"49","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK05","SWK05","Sarikei, Matu, Julau, Rajang, Daro, Bintangor, Belawai
+","SARAWAK"
+"50","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK06","SWK06","Lubok Antu, Sri Aman, Roban, Debak, Kabong, Lingga, Engkelili, Betong, Spaoh, Pusa, Saratok
+","SARAWAK"
+"51","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK07","SWK07","Serian, Simunjan, Samarahan, Sebuyau, Meludam
+","SARAWAK"
+"52","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK08","SWK08","Kuching, Bau, Lundu, Sematan
+","SARAWAK"
+"53","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=SWK09","SWK09","Zon Khas (Kampung Patarikan)
+","SARAWAK"
+"54","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=TRG01","TRG01","Kuala Terengganu, Marang, Kuala Nerus
+","TERENGGANU"
+"55","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=TRG02","TRG02","Besut, Setiu
+","TERENGGANU"
+"56","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=TRG03","TRG03","Hulu Terengganu
+","TERENGGANU"
+"57","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=TRG04","TRG04","Dungun, Kemaman
+","TERENGGANU"
+"58","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=WLY01","WLY01","Kuala Lumpur, Putrajaya
+","KUALA LUMPUR"
+"59","https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=year&zone=WLY02","WLY02","Labuan
+","LABUAN"

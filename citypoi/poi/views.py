@@ -17,7 +17,7 @@ def add_poi(request):
         form = POIForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('poi_map')
+            return redirect('poi_page')
     else:
         form = POIForm()
     return render(request, 'poi/add_poi.html', {'form': form})
@@ -28,7 +28,15 @@ def edit_poi(request, pk):
         form = POIForm(request.POST, instance=poi)
         if form.is_valid():
             form.save()
-            return redirect('poi_map')
+            return redirect('poi_page')
     else:
         form = POIForm(instance=poi)
     return render(request, 'poi/edit_poi.html', {'form': form})
+
+
+def delete_poi(request, pk):
+    poi = get_object_or_404(POI, pk=pk)
+    if request.method == 'POST':
+        poi.delete()
+        return redirect('poi_page')
+    return redirect('poi_page')
