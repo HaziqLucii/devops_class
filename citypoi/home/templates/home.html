@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Jadual Waktu Solat</h5>
+                    <p class="card-text">View the map and prayer times.</p>
+                    <a href="{% url 'waktusolat_page' %}" class="btn btn-primary">Go to</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">City Point of Interest</h5>
+                    <p class="card-text">View point of interest.</p>
+                    <a href="{% url 'poi_page' %}" class="btn btn-primary">Go to</a>
+                </div>
+            </div>
+        </div>
+        <!-- Add more cards as needed -->
+    </div>
+</div>
+{% endblock %}

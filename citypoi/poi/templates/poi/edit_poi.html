@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<a href="{% url 'poi_page' %}" class="btn btn-primary">Back</a>
+
+<div class="container mt-4">
+    <h2>Edit POI</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

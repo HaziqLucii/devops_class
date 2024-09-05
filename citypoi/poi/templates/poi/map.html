@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>City Points of Interest</h1>
+
+<div id="map"></div>
+<a href="{% url 'add_poi' %}" class="btn btn-primary mb-3">Add New POI</a>
+<table class="prayer-times-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>POI Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for poi in pois %}
+            <tr>
+                <td>{{ poi.name }}</td>
+                <td>{{ poi.description }}</td>
+                <td>{{ poi.latitude }}</td>
+                <td>{{ poi.longitude }}</td>
+                <td>{{ poi.poi_type }}</td>
+                <td>
+                    <a href="{% url 'edit_poi' poi.id %}" class="btn btn-sm btn-secondary">Edit</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No POIs found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    // Initialize the map
+    var map = L.map('map').setView([4.2105, 101.9758], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Deserialize JSON data into JavaScript object
+    var pois = {{ pois_json|safe }};
+
+    // Ensure pois is an array
+    // if (!Array.isArray(pois)) {
+    //     pois = [];
+    // }
+
+    // Initialize MarkerClusterGroup
+    var markers = L.markerClusterGroup();
+
+    // Loop through each POI and add a marker to the map
+    pois.forEach(function(poi) {
+        var fields = poi.fields;
+        var marker = L.marker([fields.latitude, fields.longitude])
+            .bindPopup('<b>' + fields.name + '</b><br>' + fields.description);
+        markers.addLayer(marker);
+    });
+
+    // Add the markers to the map if there are any
+    if (markers.getLayers().length > 0) {
+        map.addLayer(markers);
+        map.fitBounds(markers.getBounds());
+    }
+    
+
+    // Add Geocoder control
+    var geocoder = L.Control.Geocoder.nominatim({
+        geocodingQueryParams: {
+            "countrycodes": "MY"
+        }
+    });
+    var control = L.Control.geocoder({
+        geocoder: geocoder,
+        defaultMarkGeocode: false
+    }).addTo(map);
+
+    control.on('markgeocode', function(e) {
+        var latlng = e.geocode.center;
+        L.marker(latlng).addTo(map)
+            .bindPopup(e.geocode.name)
+            .openPopup();
+        map.setView(latlng, 13);
+    });
+
+</script>
+{% endblock %}

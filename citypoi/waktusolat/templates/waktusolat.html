@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Jadual Waktu Solat</h1>
+
+<div id="map"></div>
+<div id="prayer-times">
+    <!-- Bootstrap Loader -->
+    <div class="loader d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary" role="status">
+        </div>
+    </div>
+</div>
+
+<script>
+    // Loader display functions
+    function showLoader() {
+        document.querySelector('.loader').style.display = 'flex';
+    }
+
+    function hideLoader() {
+        document.querySelector('.loader').style.display = 'none';
+    }
+
+    showLoader();
+
+
+    // MAP Initialization
+    var map = L.map('map').setView([3.1390, 101.6869], 13);
+
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Zone Mapping
+    const zoneMapping = {
+        JHR01: ["Pulau Aur", "Pulau Pemanggil"],
+        JHR02: ["Johor Bahru", "Kota Tinggi", "Mersing", "Kulai"],
+        JHR03: ["Kluang", "Pontian"],
+        JHR04: ["Batu Pahat", "Muar", "Segamat", "Gemas Johor", "Tangkak"],
+        KDH01: ["Kota Setar", "Kubang Pasu", "Pokok Sena (Daerah Kecil)"],
+        KDH02: ["Kuala Muda", "Yan", "Pendang"],
+        KDH03: ["Padang Terap", "Sik"],
+        KDH04: ["Baling"],
+        KDH05: ["Bandar Baharu", "Kulim"],
+        KDH06: ["Langkawi"],
+        KDH07: ["Puncak Gunung Jerai"],
+        KTN01: ["Bachok", "Kota Bharu", "Machang", "Pasir Mas", "Pasir Puteh", "Tanah Merah", "Tumpat", "Kuala Krai", "Mukim Chiku"],
+        KTN02: ["Gua Musang (Daerah Galas Dan Bertam)", "Jeli", "Jajahan Kecil Lojing"],
+        MLK01: ["SELURUH NEGERI MELAKA"],
+        NGS01: ["Tampin", "Jempol"],
+        NGS02: ["Jelebu", "Kuala Pilah", "Rembau"],
+        NGS03: ["Port Dickson", "Seremban"],
+        PHG01: ["Pulau Tioman"],
+        PHG02: ["Kuantan", "Pekan", "Rompin", "Muadzam Shah"],
+        PHG03: ["Jerantut", "Temerloh", "Maran", "Bera", "Chenor", "Jengka"],
+        PHG04: ["Bentong", "Lipis", "Raub"],
+        PHG05: ["Genting Sempah", "Janda Baik", "Bukit Tinggi"],
+        PHG06: ["Cameron Highlands", "Genting Highlands", "Bukit Fraser"],
+        PLS01: ["Kangar", "Padang Besar", "Arau"],
+        PNG01: ["Seluruh Negeri Pulau Pinang"],
+        PRK01: ["Tapah", "Slim River", "Tanjung Malim"],
+        PRK02: ["Kuala Kangsar", "Sg. Siput", "Ipoh", "Batu Gajah", "Kampar"],
+        PRK03: ["Lenggong", "Pengkalan Hulu", "Grik"],
+        PRK04: ["Temengor", "Belum"],
+        PRK05: ["Kg Gajah", "Teluk Intan", "Bagan Datuk", "Seri Iskandar", "Beruas", "Parit", "Lumut", "Sitiawan", "Pulau Pangkor"],
+        PRK06: ["Selama", "Taiping", "Bagan Serai", "Parit Buntar"],
+        PRK07: ["Bukit Larut"],
+        SBH01: ["Bahagian Sandakan (Timur)", "Bukit Garam", "Semawang", "Temanggong", "Tambisan", "Bandar Sandakan", "Sukau"],
+        SBH02: ["Beluran", "Telupid", "Pinangah", "Terusan", "Kuamut", "Bahagian Sandakan (Barat)"],
+        SBH03: ["Lahad Datu", "Silabukan", "Kunak", "Sahabat", "Semporna", "Tungku", "Bahagian Tawau  (Timur)"],
+        SBH04: ["Bandar Tawau", "Balong", "Merotai", "Kalabakan", "Bahagian Tawau (Barat)"],
+        SBH05: ["Kudat", "Kota Marudu", "Pitas", "Pulau Banggi", "Bahagian Kudat"],
+        SBH06: ["Gunung Kinabalu"],
+        SBH07: ["Kota Kinabalu", "Ranau", "Kota Belud", "Tuaran", "Penampang", "Papar", "Putatan", "Bahagian Pantai Barat"],
+        SBH08: ["Pensiangan", "Keningau", "Tambunan", "Nabawan", "Bahagian Pendalaman (Atas)"],
+        SBH09: ["Beaufort", "Kuala Penyu", "Sipitang", "Tenom", "Long Pasia", "Membakut", "Weston", "Bahagian Pendalaman (Bawah)"],
+        SGR01: ["Gombak", "Petaling", "Sepang", "Hulu Langat", "Hulu Selangor", "S.Alam"],
+        SGR02: ["Kuala Selangor", "Sabak Bernam"],
+        SGR03: ["Klang", "Kuala Langat"],
+        SWK01: ["Limbang", "Lawas", "Sundar", "Trusan"],
+        SWK02: ["Miri", "Niah", "Bekenu", "Sibuti", "Marudi"],
+        SWK03: ["Pandan", "Belaga", "Suai", "Tatau", "Sebauh", "Bintulu"],
+        SWK04: ["Sibu", "Mukah", "Dalat", "Song", "Igan", "Oya", "Balingian", "Kanowit", "Kapit"],
+        SWK05: ["Sarikei", "Matu", "Julau", "Rajang", "Daro", "Bintangor", "Belawai"],
+        SWK06: ["Lubok Antu", "Sri Aman", "Roban", "Debak", "Kabong", "Lingga", "Engkelili", "Betong", "Spaoh", "Pusa", "Saratok"],
+        SWK07: ["Serian", "Simunjan", "Samarahan", "Sebuyau", "Meludam"],
+        SWK08: ["Kuching", "Bau", "Lundu", "Sematan"],
+        SWK09: ["Zon Khas (Kampung Patarikan)"],
+        TRG01: ["Kuala Terengganu", "Marang", "Kuala Nerus"],
+        TRG02: ["Besut", "Setiu"],
+        TRG03: ["Hulu Terengganu"],
+        TRG04: ["Dungun", "Kemaman"],
+        WLY01: ["Kuala Lumpur", "Putrajaya"],
+        WLY02: ["Labuan"]
+    };
+
+    function getZoneCode(district) {
+        for (const [zone, districts] of Object.entries(zoneMapping)) {
+            if (districts.includes(district)) {
+                return zone;
+            }
+        }
+        return null; // Return null if the district is not found in any zone
+    }
+
+    // reverse geocode 
+    async function reverseGeocode(lat, lon) {
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&addressdetails=1`;
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data && data.address) {
+                const address = data.address;
+                const addressString = [
+                    address.road || '',
+                    address.suburb || '',
+                    address.city || '',
+                    address.state || '',
+                    address.country || ''
+                ].filter(Boolean).join(', ');
+
+                const district = address.district || 'District not found';
+                const zoneCode = getZoneCode(district);
+
+                return {
+                    address: addressString,
+                    district: district,
+                    zoneCode: zoneCode || 'Zone not found'
+                };
+            } else {
+                return { error: 'Address not found' };
+            }
+        } catch (error) {
+            console.error('Error with reverse geocoding:', error);
+            return { error: 'Error retrieving address' };
+        }
+    }
+
+    // fetch prayer times
+    function fetchPrayerTimes(zoneCode) {
+        const today = new Date().toISOString().split('T')[0];
+        const url = `https://www.e-solat.gov.my/index.php?r=esolatApi/takwimsolat&period=duration&zone=${zoneCode}`;
+        const payload = new URLSearchParams({
+            datestart: today,
+            dateend: today
+        });
+
+        fetch(url, {
+            method: 'POST',
+            body: payload
+        })
+        .then(response => response.json())
+        .then(data => {
+            hideLoader();
+            if (data && data.prayerTime) {
+                displayPrayerTimes(data.prayerTime);
+            } else {
+                document.getElementById('prayer-times').innerHTML = 'No prayer times found.';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching prayer times:', error);
+            document.getElementById('prayer-times').innerHTML = 'Error retrieving prayer times.';
+        });
+    }
+
+    function displayPrayerTimes(prayerTimes) {
+        let html = '<table class="prayer-times-table"><tr><th>Date</th><th>Imsak</th><th>Fajr</th><th>Syuruk</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr>';
+        prayerTimes.forEach(time => {
+            html += `<tr>
+                <td>${time.date}</td>
+                <td>${time.imsak}</td>
+                <td>${time.fajr}</td>
+                <td>${time.syuruk}</td>
+                <td>${time.dhuhr}</td>
+                <td>${time.asr}</td>
+                <td>${time.maghrib}</td>
+                <td>${time.isha}</td>
+            </tr>`;
+        });
+        html += '</table>';
+        document.getElementById('prayer-times').innerHTML = html;
+    }
+
+
+    //Geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            map.setView([lat, lon], 13);
+
+            const result = await reverseGeocode(lat, lon);
+
+            if (result.error) {
+                console.error(result.error);
+                return;
+            }
+
+            const marker = L.marker([lat, lon]).addTo(map);
+            const popupContent = `You are here!<br><br>
+                                Address: ${result.address}<br><br>
+                                District: ${result.district}<br>
+                                Zone Code: ${result.zoneCode}`;
+
+            marker.bindPopup(popupContent).openPopup();
+
+            if (result.zoneCode) {
+                fetchPrayerTimes(result.zoneCode);
+            }
+        }, function(error) {
+            console.error("Geolocation error", error);
+        });
+    } else {
+        console.log("Geolocation is not supported by this browser");
+    }
+
+</script>
+{% endblock %}

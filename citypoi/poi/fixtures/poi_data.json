@@ -1,0 +1,112 @@
+[
+    {
+        "model": "poi.poi",
+        "pk": 1,
+        "fields": {
+            "name": "Petronas Towers",
+            "description": "Iconic skyscrapers in Kuala Lumpur.",
+            "latitude": 3.1578,
+            "longitude": 101.7116,
+            "poi_type": "Landmark"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 2,
+        "fields": {
+            "name": "Kuala Lumpur Bird Park",
+            "description": "World's largest free-flight walk-in aviary.",
+            "latitude": 3.1580,
+            "longitude": 101.7111,
+            "poi_type": "Park"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 3,
+        "fields": {
+            "name": "Penang Hill",
+            "description": "A hill resort offering panoramic views of Penang.",
+            "latitude": 5.4160,
+            "longitude": 100.3127,
+            "poi_type": "Tourist Spot"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 4,
+        "fields": {
+            "name": "Langkawi Sky Bridge",
+            "description": "A curved pedestrian bridge offering stunning views.",
+            "latitude": 6.3086,
+            "longitude": 99.7411,
+            "poi_type": "Attraction"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 5,
+        "fields": {
+            "name": "Merdeka Square",
+            "description": "Historic site in Kuala Lumpur where Malaysia's independence was declared.",
+            "latitude": 3.1446,
+            "longitude": 101.6948,
+            "poi_type": "Historic Site"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 6,
+        "fields": {
+            "name": "Batu Caves",
+            "description": "A series of caves and cave temples in Gombak.",
+            "latitude": 3.2384,
+            "longitude": 101.6830,
+            "poi_type": "Cultural Site"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 7,
+        "fields": {
+            "name": "Johor Bahru City Square",
+            "description": "A shopping mall and commercial hub in Johor Bahru.",
+            "latitude": 1.4571,
+            "longitude": 103.7411,
+            "poi_type": "Shopping"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 8,
+        "fields": {
+            "name": "Sarawak Cultural Village",
+            "description": "A living museum showcasing the cultural heritage of Sarawak.",
+            "latitude": 1.5910,
+            "longitude": 110.3225,
+            "poi_type": "Cultural Village"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 9,
+        "fields": {
+            "name": "Melaka Historical City",
+            "description": "A historical city with colonial architecture and rich heritage.",
+            "latitude": 2.1896,
+            "longitude": 102.2504,
+            "poi_type": "Historic City"
+        }
+    },
+    {
+        "model": "poi.poi",
+        "pk": 10,
+        "fields": {
+            "name": "Kota Kinabalu Waterfront",
+            "description": "A popular waterfront area with scenic views in Kota Kinabalu.",
+            "latitude": 5.9791,
+            "longitude": 116.0724,
+            "poi_type": "Recreation"
+        }
+    }
+]

@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import map_view
+from . import views
 
 urlpatterns = [
-    path('', map_view, name='map_view')
+    path('', views.waktusolat_page, name='waktusolat_page'),
+    path('reverse-geocode/', views.reverse_geocode, name='reverse_geocode'),
 ]
