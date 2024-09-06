@@ -63,8 +63,12 @@
                     address.country || ''
                 ].filter(Boolean).join(', ');
 
-                const district = address.district || 'District not found';
-                const zoneCode = getZoneCode(district);
+                const district = address.district || address.city;
+                let zoneCode = getZoneCode(district);
+
+                if (!zoneCode) {
+                    zoneCode = 'WLY01';
+                }
 
                 return {
                     address: addressString,
@@ -144,7 +148,7 @@
             const marker = L.marker([lat, lon]).addTo(map);
             const popupContent = `You are here!<br><br>
                                 Address: ${result.address}<br><br>
-                                District: ${result.district}<br>
+                                District/City: ${result.district}<br>
                                 Zone Code: ${result.zoneCode}`;
 
             marker.bindPopup(popupContent).openPopup();
