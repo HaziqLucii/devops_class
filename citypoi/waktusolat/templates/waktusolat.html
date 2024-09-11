@@ -18,6 +18,8 @@
     const zoneData = {{ zoneMapping|safe }};
     let userlat = '';
     let userlon = '';
+    let meccamarker;
+    let polyline;
 
     const mosqueIcon = L.icon({
         iconUrl: '/media/mosque.png',
@@ -199,8 +201,64 @@
         mosques.forEach(mosque => {
             const lat = parseFloat(mosque.latitud);
             const lon = parseFloat(mosque.longitud);
+
+            // wrap element in bootstrap
+            const div = document.createElement("div");
+            div.className = "card"; // Use Bootstrap card class
+
+            div.innerHTML = `
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${mosque.nama_masjid}</h5>
+                        <p class="card-text">${mosque.sejarah}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">${mosque.alamat}</li>
+                    </ul>
+                    <div class="card-body">
+                        <button class="btn btn-primary btn-sm mt-2">Navigate</button>
+                    </div>
+                </div>
+            `;
+            // end wrap element in bootstrap
+
+            // create a new button for navigation
+            const button = div.querySelector("button");
+            button.onclick = function() {
+                const routingControl = L.Routing.control({
+                    waypoints: [
+                        L.latLng(userlat, userlon),
+                        L.latLng(lat, lon)
+                    ]
+                }).addTo(map);
+
+                // Add a close button to the routing container
+                routingControl.on('routeselected', function() {
+                    const routingContainer = routingControl._altContainer;
+
+                    if (routingContainer) {
+                        // Create the close button
+                        const closeButton = document.createElement('button');
+                        closeButton.className = 'btn btn-danger btn-sm leaflet-routing-close';
+                        closeButton.style.position = 'absolute';
+                        closeButton.style.top = '5px';
+                        closeButton.style.right = '5px';
+                        closeButton.innerHTML = '&times;';
+
+                        // Add click event to remove the routing control
+                        closeButton.onclick = function() {
+                            routingControl.remove();
+                        };
+
+                        // Append the close button to the container
+                        routingContainer.appendChild(closeButton);
+                    }
+                });
+            };
+
             const marker = L.marker([lat, lon], { icon: mosqueIcon }).addTo(map)
-                .bindPopup(`<b>${mosque.nama_masjid}</b><br>${mosque.alamat}`);
+                .bindPopup(div);
+            // end create a new button for navigation
             bounds.push([lat, lon]);
         });
 
@@ -211,5 +269,66 @@
         map.fitBounds(bounds);
     }
 
+    // Create a custom Leaflet button with cleanup on removal
+    // Function to add markers
+    function addMarkers() {
+        let coordinatemecca = [21.3891, 39.8579]
+        const meccaIcon = L.icon({
+            iconUrl: '/media/mecca.png',
+            iconSize: [32, 32], // Size of the icon
+            iconAnchor: [16, 32], // Point of the icon which will correspond to marker's location
+            popupAnchor: [0, -32]
+        })
+        meccamarker = L.marker(coordinatemecca, { icon: meccaIcon }).addTo(map);
+        polyline = L.polyline([coordinatemecca, [userlat, userlon]], {color: 'red'}).addTo(map);
+        map.fitBounds([coordinatemecca, [userlat, userlon]]);
+    }
+
+    // Function to remove markers
+    function removeMarkers() {
+        map.removeLayer(meccamarker);
+        map.removeLayer(polyline);
+        map.fitBounds([[userlat, userlon]]);
+    }
+    // Toggle function
+    let markersVisible = false;
+    function toggleMarkers() {
+        if (markersVisible) {
+            removeMarkers();
+        } else {
+            addMarkers();
+        }
+        markersVisible = !markersVisible;
+    }
+    L.Control.CustomButton = L.Control.extend({
+        onAdd: function(map) {
+            const btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+            btn.innerHTML = 'kiblat';
+            btn.style.backgroundColor = 'white';
+            btn.style.width = 'auto';
+            btn.style.height = '30px';
+            btn.style.cursor = 'pointer';
+
+            // Attach the toggle function to the button's click event
+            btn.onclick = toggleMarkers;
+
+            this._button = btn; // Store the button for later use
+            return btn;
+        },
+        onRemove: function(map) {
+            // Cleanup actions when the control is removed
+            if (this._button) {
+                this._button.onclick = null; // Remove the click event listener
+            }
+            removeMarkers(); // Optionally remove markers from the map
+        }
+    });
+
+    // Add the custom button to the map
+    L.control.customButton = function(opts) {
+        return new L.Control.CustomButton(opts);
+    }
+
+    const customButton = L.control.customButton({ position: 'topright' }).addTo(map);
 </script>
 {% endblock %}
