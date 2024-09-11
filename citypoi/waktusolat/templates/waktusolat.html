@@ -216,14 +216,17 @@
                         <li class="list-group-item">${mosque.alamat}</li>
                     </ul>
                     <div class="card-body">
-                        <button class="btn btn-primary btn-sm mt-2">Navigate</button>
+                        <button id="navigate" class="btn btn-primary btn-sm mt-2">Navigate</button>
+                        <button id="waze" class="btn btn-secondary btn-sm mt-2">Waze</button>
+                        <button id="googlemaps" class="btn btn-success btn-sm mt-2">Google Maps</button>
                     </div>
                 </div>
             `;
             // end wrap element in bootstrap
 
+
             // create a new button for navigation
-            const button = div.querySelector("button");
+            const button = div.querySelector("#navigate");
             button.onclick = function() {
                 const routingControl = L.Routing.control({
                     waypoints: [
@@ -255,6 +258,23 @@
                     }
                 });
             };
+
+            // Waze Button
+            const wazeButton = div.querySelector("#waze");
+            wazeButton.onclick = function() {
+                var wazeUrl = `https://www.waze.com/ul?to=${lat},${lon}&from=${userlat},${userlon}&navigate=yes`;
+
+                window.open(wazeUrl, '_blank');
+            };
+
+            // Google Maps Button
+            const googleMapButton = div.querySelector("#googlemaps");
+            googleMapButton.onclick = function() {
+                var googleMapUrl = `https://www.google.com/maps/dir/?api=1&origin=${userlat},${userlon}&destination=${lat},${lon}&travelmode=driving`;
+
+                window.open(googleMapUrl, '_blank');
+            };
+            
 
             const marker = L.marker([lat, lon], { icon: mosqueIcon }).addTo(map)
                 .bindPopup(div);
@@ -300,35 +320,37 @@
         }
         markersVisible = !markersVisible;
     }
-    L.Control.CustomButton = L.Control.extend({
-        onAdd: function(map) {
-            const btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
-            btn.innerHTML = 'kiblat';
-            btn.style.backgroundColor = 'white';
-            btn.style.width = 'auto';
-            btn.style.height = '30px';
-            btn.style.cursor = 'pointer';
+    // L.Control.CustomButton = L.Control.extend({
+    //     onAdd: function(map) {
+    //         const btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+    //         btn.innerHTML = 'kiblat';
+    //         btn.style.backgroundColor = 'white';
+    //         btn.style.width = 'auto';
+    //         btn.style.height = '30px';
+    //         btn.style.cursor = 'pointer';
 
-            // Attach the toggle function to the button's click event
-            btn.onclick = toggleMarkers;
+    //         // Attach the toggle function to the button's click event
+    //         btn.onclick = toggleMarkers;
 
-            this._button = btn; // Store the button for later use
-            return btn;
-        },
-        onRemove: function(map) {
-            // Cleanup actions when the control is removed
-            if (this._button) {
-                this._button.onclick = null; // Remove the click event listener
-            }
-            removeMarkers(); // Optionally remove markers from the map
-        }
-    });
+    //         this._button = btn; // Store the button for later use
+    //         return btn;
+    //     },
+    //     onRemove: function(map) {
+    //         // Cleanup actions when the control is removed
+    //         if (this._button) {
+    //             this._button.onclick = null; // Remove the click event listener
+    //         }
+    //         removeMarkers(); // Optionally remove markers from the map
+    //     }
+    // });
 
-    // Add the custom button to the map
-    L.control.customButton = function(opts) {
-        return new L.Control.CustomButton(opts);
-    }
+    // // Add the custom button to the map
+    // L.control.customButton = function(opts) {
+    //     return new L.Control.CustomButton(opts);
+    // }
 
-    const customButton = L.control.customButton({ position: 'topright' }).addTo(map);
+    // const customButton = L.control.customButton({ position: 'topright' }).addTo(map);
+
+
 </script>
 {% endblock %}
