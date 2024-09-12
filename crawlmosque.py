@@ -7,6 +7,12 @@ from shapely.geometry import Point
 lat = 5.056870
 lon = 108.554843
 distance = 70000000
+
+# Get user input
+# lat = input("Lat: ")
+# lon = input("Lon: ")
+# distance = input("Distance: ")
+
 api_url = 'https://www.e-solat.gov.my/index.php?r=esolatApi/nearestMosque&lat='+ str(lat) +'&long=' + str(lon) + '&dist=' + str(distance)
 
 # Fetch data from the API

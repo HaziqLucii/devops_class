@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+APP_DIR = os.path.abspath(os.path.dirname(__file__))
+
 
 # Application definition
 
