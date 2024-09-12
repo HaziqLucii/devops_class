@@ -320,36 +320,36 @@
         }
         markersVisible = !markersVisible;
     }
-    // L.Control.CustomButton = L.Control.extend({
-    //     onAdd: function(map) {
-    //         const btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
-    //         btn.innerHTML = 'kiblat';
-    //         btn.style.backgroundColor = 'white';
-    //         btn.style.width = 'auto';
-    //         btn.style.height = '30px';
-    //         btn.style.cursor = 'pointer';
+    L.Control.CustomButton = L.Control.extend({
+        onAdd: function(map) {
+            const btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+            btn.innerHTML = 'kiblat';
+            btn.style.backgroundColor = 'white';
+            btn.style.width = 'auto';
+            btn.style.height = '30px';
+            btn.style.cursor = 'pointer';
 
-    //         // Attach the toggle function to the button's click event
-    //         btn.onclick = toggleMarkers;
+            // Attach the toggle function to the button's click event
+            btn.onclick = toggleMarkers;
 
-    //         this._button = btn; // Store the button for later use
-    //         return btn;
-    //     },
-    //     onRemove: function(map) {
-    //         // Cleanup actions when the control is removed
-    //         if (this._button) {
-    //             this._button.onclick = null; // Remove the click event listener
-    //         }
-    //         removeMarkers(); // Optionally remove markers from the map
-    //     }
-    // });
+            this._button = btn; // Store the button for later use
+            return btn;
+        },
+        onRemove: function(map) {
+            // Cleanup actions when the control is removed
+            if (this._button) {
+                this._button.onclick = null; // Remove the click event listener
+            }
+            removeMarkers(); // Optionally remove markers from the map
+        }
+    });
 
-    // // Add the custom button to the map
-    // L.control.customButton = function(opts) {
-    //     return new L.Control.CustomButton(opts);
-    // }
+    // Add the custom button to the map
+    L.control.customButton = function(opts) {
+        return new L.Control.CustomButton(opts);
+    }
 
-    // const customButton = L.control.customButton({ position: 'topright' }).addTo(map);
+    const customButton = L.control.customButton({ position: 'topright' }).addTo(map);
 
 
 </script>
