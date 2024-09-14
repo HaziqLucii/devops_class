@@ -6,3 +6,5 @@ geopandas
 shapely
 mysqlclient
 gunicorn
+selenium
+pytest
