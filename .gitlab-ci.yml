@@ -1,0 +1,48 @@
+
+image: docker:cli
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - name: docker:dind
+
+before_script:
+  - export $(cat .env | xargs)
+
+build:
+  stage: build
+  script:
+    - docker-compose up -d
+  artifacts:
+    paths:
+      - docker-compose.yml
+
+test:
+  stage: test
+  script:
+    - echo "Running tests..."
+    - apk update
+    - apk add --no-cache python3 py3-pip
+    - python3 -m venv /venv
+    - source /venv/bin/activate
+    - pip install pytest selenium
+    - docker-compose up -d
+    - sleep 15
+    - python citypoi/poi/test_add_poi.py
+  artifacts:
+    paths:
+      - docker-compose.yml
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Successfully built"
+  dependencies:
+    - test
